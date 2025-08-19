@@ -1,0 +1,12 @@
+package com.bulletmagnet.bulletquest.helpers;
+
+public final class GameConstants {
+
+    public static final class FACE_DIR{
+        public static final int RIGHT = 3;
+        public static final int LEFT = 2;
+        public static final int UP = 1;
+        public static final int DOWN = 0;
+
+    }
+}
