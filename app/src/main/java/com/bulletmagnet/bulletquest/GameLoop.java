@@ -25,11 +25,13 @@ public class GameLoop implements Runnable{
             long nowDelta = System.nanoTime();
             double timeSinceLastDelta = nowDelta - lastDelta;
             double delta = timeSinceLastDelta / nanoSec;
-
+            gamePanel.update(delta);
             gamePanel.render();
-            fps++;
-            long now = System.currentTimeMillis();
+
             lastDelta = nowDelta;
+            fps++;
+
+            long now = System.currentTimeMillis();
             if (now - lastFPScheck >= 1000){
                 System.out.println("FPS: " + fps);
                 fps = 0;
