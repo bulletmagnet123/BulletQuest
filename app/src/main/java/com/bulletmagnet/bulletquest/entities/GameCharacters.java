@@ -2,6 +2,7 @@ package com.bulletmagnet.bulletquest.entities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 
 import com.bulletmagnet.bulletquest.MainActivity;
 import com.bulletmagnet.bulletquest.R;
@@ -22,6 +23,20 @@ public enum GameCharacters {
                 sprites[j][i] = getScaledBitmap(Bitmap.createBitmap(spriteSheet, 16 * i, 16 * j, 16, 16));
     }
 
+    public int getAnimationFrames(int direction) {
+        // For simplicity, assuming 4 frames for all animations for now
+        // You can make this more specific if needed
+        switch (this) {
+            case PLAYER:
+                // if direction corresponds to a specific animation with different frames
+                return 4; // Or return a specific value based on direction/animation type
+            case SKELETON:
+                return 4; // Or return a specific value based on direction/animation type
+            default:
+                return 1;
+        }
+    }
+
     public Bitmap getSpriteSheet(){
         return spriteSheet;
     }
@@ -33,4 +48,6 @@ public enum GameCharacters {
     private Bitmap getScaledBitmap(Bitmap bitmap){
         return Bitmap.createScaledBitmap(bitmap,bitmap.getWidth() * 6,bitmap.getHeight()*6,false);
     }
+
+
 }
