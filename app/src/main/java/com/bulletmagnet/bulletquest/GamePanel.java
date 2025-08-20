@@ -15,9 +15,11 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import com.bulletmagnet.bulletquest.entities.GameCharacters;
+import com.bulletmagnet.bulletquest.enviroments.GameMap;
 import com.bulletmagnet.bulletquest.helpers.GameConstants;
 import com.bulletmagnet.bulletquest.inputs.TouchEvents;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
@@ -53,6 +55,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private int skeletonAnimationIndexY;
     private int aniSpeed = 10;
 
+    private GameMap MapYoutube;
+
 
 
     public GamePanel(Context context) {
@@ -64,6 +68,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         RedPaint = new Paint(Color.RED);
 
         skeletonPos = new PointF(rand.nextInt(GAME_WIDTH), rand.nextInt(GAME_HEIGHT));
+
+        int[][] spriteIds = {
+                {454, 276, 275, 275, 190, 275, 275, 279, 275, 275, 275, 297, 110, 0, 1, 1, 1, 2, 110, 132},
+                {454, 275, 169, 232, 238, 275, 275, 275, 276, 275, 275, 297, 110, 22, 89, 23, 23, 24, 110, 132},
+                {454, 275, 190, 276, 275, 275, 279, 275, 275, 275, 279, 297, 110, 22, 23, 23, 23, 24, 110, 132},
+                {454, 275, 190, 279, 275, 275, 169, 233, 275, 275, 275, 297, 110, 22, 23, 23, 23, 24, 110, 132},
+                {454, 275, 190, 276, 277, 275, 190, 279, 279, 279, 275, 297, 110, 22, 23, 88, 23, 24, 110, 132},
+                {454, 275, 235, 232, 232, 232, 260, 279, 276, 279, 275, 297, 110, 22, 23, 89, 23, 24, 110, 132},
+                {454, 275, 275, 275, 275, 275, 190, 279, 279, 279, 275, 297, 110, 22, 23, 23, 23, 24, 110, 132},
+                {454, 277, 275, 275, 279, 275, 257, 232, 232, 232, 238, 297, 110, 22, 88, 23, 23, 24, 110, 132},
+                {454, 275, 275, 275, 275, 275, 190, 279, 275, 275, 275, 297, 110, 22, 23, 23, 88, 24, 110, 132},
+                {454, 275, 275, 275, 275, 275, 190, 279, 279, 279, 279, 297, 110, 22, 23, 23, 23, 24, 110, 132},
+                {454, 169, 232, 232, 232, 232, 239, 232, 232, 232, 172, 297, 110, 22, 23, 89, 23, 24, 110, 132},
+                {454, 190, 279, 275, 275, 275, 275, 275, 275, 275, 190, 297, 110, 44, 45, 45, 45, 46, 110, 132}
+        };
+
+
+
+
+
+        MapYoutube = new GameMap(spriteIds);
+
 
         touchEvents = new TouchEvents(this);
 
@@ -161,6 +187,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Canvas c = holder.lockCanvas();
         c.drawColor(Color.BLACK);
 
+        MapYoutube.draw(c);
+
         touchEvents.draw(c);
 
 
@@ -192,8 +220,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         PlayerX = 200;
         PlayerY = 200;
-
-
 
         gameLoop.startGameLoop();
 
