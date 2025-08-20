@@ -1,5 +1,8 @@
 package com.bulletmagnet.bulletquest;
 
+import static com.bulletmagnet.bulletquest.MainActivity.GAME_HEIGHT;
+import static com.bulletmagnet.bulletquest.MainActivity.GAME_WIDTH;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,14 +18,15 @@ import com.bulletmagnet.bulletquest.entities.GameCharacters;
 import com.bulletmagnet.bulletquest.helpers.GameConstants;
 import com.bulletmagnet.bulletquest.inputs.TouchEvents;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private Paint redPaint = new Paint();
     private SurfaceHolder holder;
-    private float x,y;
+    private float PlayerX, PlayerY;
+
+    private float SkeletonX, SkeletonY;
 
     private boolean movePlayer;
     private PointF lastTouchDiff;
@@ -59,15 +63,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         BluePaint = new Paint(Color.BLUE);
         RedPaint = new Paint(Color.RED);
 
-        skeletonPos = new PointF(rand.nextInt(1080), rand.nextInt(1920));
+        skeletonPos = new PointF(rand.nextInt(GAME_WIDTH), rand.nextInt(GAME_HEIGHT));
 
         touchEvents = new TouchEvents(this);
 
-        x = 200;
-        y = 200;
+        PlayerX = 200;
+        PlayerY = 200;
 
-        /*for (int i = 0; i < 50; i++)
-            skeletons.add(new PointF(rand.nextInt(1080), rand.nextInt(1920)));*/
+
     }
 
     public void update(double delta){
@@ -80,22 +83,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         switch (skeletonDir){
             case GameConstants.FACE_DIR.DOWN:
-                skeletonPos.y += delta * 300;
-                if (skeletonPos.y >= 1920)
+                skeletonPos.y += (float) (delta * 300);
+                if (skeletonPos.y >= GAME_HEIGHT)
                     skeletonDir = GameConstants.FACE_DIR.UP;
                 break;
             case GameConstants.FACE_DIR.UP:
-                skeletonPos.y -= delta * 300;
+                skeletonPos.y -= (float) (delta * 300);
                 if (skeletonPos.y <= 0)
                     skeletonDir = GameConstants.FACE_DIR.DOWN;
                 break;
             case GameConstants.FACE_DIR.LEFT:
-                skeletonPos.x += delta * 300;
-                if (skeletonPos.x >= 1080)
+                skeletonPos.x += (float) (delta * 300);
+                if (skeletonPos.x >= GAME_WIDTH)
                     skeletonDir = GameConstants.FACE_DIR.RIGHT;
                 break;
             case GameConstants.FACE_DIR.RIGHT:
-                skeletonPos.x -= delta * 300;
+                skeletonPos.x -= (float) (delta * 300);
                 if (skeletonPos.x <= 0)
                     skeletonDir = GameConstants.FACE_DIR.LEFT;
                 break;
@@ -114,35 +117,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         double angle = Math.atan(ratio);
         float xSpeed = (float) Math.cos(angle);
         float ySpeed = (float) Math.sin(angle);
-
-        // If dx and dy are both 0 (e.g., joystick released and centered), no movement.
-        // You might also want a "dead zone" here if your joystick is sensitive.
         if (xSpeed > ySpeed) {
-
-
-
             if (lastTouchDiff.x > 0) playerFaceDir = GameConstants.FACE_DIR.RIGHT;
-
-
             else playerFaceDir = GameConstants.FACE_DIR.LEFT;
-
-
         } else {
-
-
             if (lastTouchDiff.y > 0) playerFaceDir = GameConstants.FACE_DIR.DOWN;
-
-
             else playerFaceDir = GameConstants.FACE_DIR.UP;
-
-
         }
         if (lastTouchDiff.x < 0)
             xSpeed *= -1;
         if (lastTouchDiff.y < 0)
             ySpeed *= -1;
-        x += xSpeed * baseSpeed;
-        y += ySpeed * baseSpeed;
+        PlayerX += xSpeed * baseSpeed;
+        PlayerY += ySpeed * baseSpeed;
     }
 
     private void updateAnimation(){
@@ -178,7 +165,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
 
-        c.drawBitmap(GameCharacters.PLAYER.getSprite(playerAntIndexY, playerFaceDir), x, y, null);
+        c.drawBitmap(GameCharacters.PLAYER.getSprite(playerAntIndexY, playerFaceDir), PlayerX, PlayerY, null);
 
 
         c.drawBitmap(GameCharacters.SKELETON.getSprite(skeletonAnimationIndexY, skeletonDir), skeletonPos.x, skeletonPos.y, null);
@@ -203,6 +190,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
         gameLoop = new GameLoop(this);
 
+        PlayerX = 200;
+        PlayerY = 200;
+
+
+
         gameLoop.startGameLoop();
 
     }
@@ -215,23 +207,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             float newX = event.getX();
             float newY = event.getY();
 
-            float xDiff = Math.abs(newX - x);
-            float yDiff = Math.abs(newY - y);
+            float xDiff = Math.abs(newX - PlayerX);
+            float yDiff = Math.abs(newY - PlayerY);
 
             if (xDiff > yDiff) {
-                if (newX > x)
+                if (newX > PlayerX)
                     playerFaceDir = GameConstants.FACE_DIR.RIGHT;
                 else
                     playerFaceDir = GameConstants.FACE_DIR.LEFT;
             } else {
-                if (newY > y)
+                if (newY > PlayerY)
                     playerFaceDir = GameConstants.FACE_DIR.DOWN;
                 else
                     playerFaceDir = GameConstants.FACE_DIR.UP;
             }
 
-            //x = newX;
-            //y = newY;
         }
 
         return touchEvents.touchEvent(event);

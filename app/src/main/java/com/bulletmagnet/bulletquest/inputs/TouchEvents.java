@@ -11,7 +11,7 @@ import com.bulletmagnet.bulletquest.GamePanel;
 public class TouchEvents {
     private GamePanel gamePanel;
 
-    private float xCenter = 540, yCenter = 2000, radius = 100;
+    private float xCenter = 250, yCenter = 800, radius = 150;
     private Paint circlePaint, yellowPaint;
 
     float xTouch, yTouch;
@@ -34,8 +34,7 @@ public class TouchEvents {
         c.drawCircle(xCenter, yCenter, radius, circlePaint);
         if (touchDown){
             c.drawLine(xCenter, yCenter, xTouch, yTouch, yellowPaint);
-            c.drawLine(xCenter, yCenter, xTouch, yCenter, yellowPaint);
-            c.drawLine(xTouch, yTouch, xTouch, yCenter, yellowPaint);
+
         }
 
     }
