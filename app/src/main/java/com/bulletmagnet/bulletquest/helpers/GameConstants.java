@@ -14,5 +14,11 @@ public final class GameConstants {
         public static final int DEFAULT_SIZE = 16;
         public static final int DEFAULT_SCALE = 6;
         public static final int SIZE = DEFAULT_SIZE * DEFAULT_SCALE;;
+
+    }
+
+    public static final class Animation{
+        public static final int ANIM_DEFAULT_SPEED = 10;
+        public static final int AMOUNT = 4;
     }
 }

@@ -11,10 +11,16 @@ public class GameMap {
         this.spriteIds = spriteIds;
     }
 
-    public void draw(Canvas canvas) {
-        for (int j = 0; j < spriteIds.length; j++)
-            for (int i = 0; i < spriteIds[j].length; i++) {
-                canvas.drawBitmap(Floor.OUTSIDE.getSprite(spriteIds[j][i]), i * 96, j * 96, null);
-            }
-        }
+
+
+    public int getSpriteID(int xIndex, int yIndex){
+        return spriteIds[yIndex][xIndex];
+    }
+    public int getArrayWidth(){
+        return spriteIds[0].length;
+    }
+    public int getArrayHeight(){
+        return spriteIds.length;
+    }
+
 }

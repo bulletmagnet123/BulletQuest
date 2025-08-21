@@ -72,7 +72,7 @@ public class TouchEvents {
             }
             case MotionEvent.ACTION_UP -> {
                 touchDown = false;
-                gamePanel.setPlayerMoveFalse();
+
             }
         }
         return true;

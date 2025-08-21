@@ -17,6 +17,7 @@ public enum GameCharacters implements BitmapMethods {
     private Bitmap[][] sprites = new Bitmap[7][4];
     private BitmapFactory.Options options = new BitmapFactory.Options();
 
+
     GameCharacters(int resID) {
         options.inScaled = false;
         spriteSheet = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), resID, options);
