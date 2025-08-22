@@ -1,7 +1,7 @@
 package com.bulletmagnet.bulletquest.entities;
 
-import static com.bulletmagnet.bulletquest.MainActivity.GAME_HEIGHT;
-import static com.bulletmagnet.bulletquest.MainActivity.GAME_WIDTH;
+import static com.bulletmagnet.bulletquest.main.MainActivity.GAME_HEIGHT;
+import static com.bulletmagnet.bulletquest.main.MainActivity.GAME_WIDTH;
 
 import android.graphics.PointF;
 

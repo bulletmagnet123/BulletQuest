@@ -3,7 +3,7 @@ package com.bulletmagnet.bulletquest.enviroments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.bulletmagnet.bulletquest.MainActivity;
+import com.bulletmagnet.bulletquest.main.MainActivity;
 import com.bulletmagnet.bulletquest.R;
 import com.bulletmagnet.bulletquest.helpers.GameConstants;
 import com.bulletmagnet.bulletquest.helpers.interfaces.BitmapMethods;

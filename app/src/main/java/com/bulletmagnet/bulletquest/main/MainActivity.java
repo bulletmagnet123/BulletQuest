@@ -1,4 +1,4 @@
-package com.bulletmagnet.bulletquest;
+package com.bulletmagnet.bulletquest.main;
 
 import android.content.Context;
 import android.os.Build;
@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.bulletmagnet.bulletquest.main.GamePanel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
+
+
         setContentView(new GamePanel(this));
-        System.out.println("Screen WIDTH"+ GAME_WIDTH);
-        System.out.println("Screen HEIGHT: " + GAME_HEIGHT);
     }
 
     public static Context getGameContext() {

@@ -1,8 +1,5 @@
 package com.bulletmagnet.bulletquest.enviroments;
 
-import static com.bulletmagnet.bulletquest.MainActivity.GAME_HEIGHT;
-import static com.bulletmagnet.bulletquest.MainActivity.GAME_WIDTH;
-
 import android.graphics.Canvas;
 
 import com.bulletmagnet.bulletquest.helpers.GameConstants;
