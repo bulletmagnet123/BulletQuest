@@ -1,5 +1,6 @@
 package com.bulletmagnet.bulletquest.gamestates;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,7 +10,6 @@ import android.view.MotionEvent;
 import com.bulletmagnet.bulletquest.main.Game;
 import com.bulletmagnet.bulletquest.main.MainActivity;
 import com.bulletmagnet.bulletquest.entities.Character;
-import com.bulletmagnet.bulletquest.entities.GameCharacters;
 import com.bulletmagnet.bulletquest.entities.Player;
 import com.bulletmagnet.bulletquest.entities.enemies.Skeleton;
 import com.bulletmagnet.bulletquest.enviroments.MapManager;
@@ -29,6 +29,8 @@ public class Playing extends BaseState implements GameStateInterface {
     private Skeleton skeleton;
     private float xCenter = 250, yCenter = 800, radius = 150;
     private Paint circlePaint, JoystickPAINT;
+    private Context context;
+
 
     float xTouch, yTouch;
 
@@ -36,6 +38,10 @@ public class Playing extends BaseState implements GameStateInterface {
 
     public Playing(Game game) {
         super(game);
+
+        context = MainActivity.getGameContext();
+
+
 
         circlePaint = new Paint();
         circlePaint.setStyle(Paint.Style.STROKE);
@@ -46,7 +52,11 @@ public class Playing extends BaseState implements GameStateInterface {
         JoystickPAINT.setStyle(Paint.Style.FILL);
         JoystickPAINT.setColor(Color.RED);
 
-        mapManager = new MapManager();
+        mapManager = new MapManager(context);
+
+
+
+
         player = new Player();
         skeleton = new Skeleton(new PointF(100, 100));
 
@@ -86,8 +96,8 @@ public class Playing extends BaseState implements GameStateInterface {
         if (lastTouchDiff.y < 0)
             ySpeed *= -1;
 
-        int pWidth = GameConstants.Sprite.SIZE;
-        int pHeight = GameConstants.Sprite.SIZE;
+        int pWidth = GameConstants.Sprite.SIZESCALLED;
+        int pHeight = GameConstants.Sprite.SIZESCALLED;
 
         if (xSpeed <= 0)
             pWidth = 0;

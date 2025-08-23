@@ -17,6 +17,7 @@ public enum Floor implements BitmapMethods {
 
 
     Floor(int resID,int tilesInWidth, int tilesInHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         sprites = new Bitmap[tilesInHeight * tilesInWidth];
 
@@ -28,10 +29,8 @@ public enum Floor implements BitmapMethods {
                 sprites[index] = getScaledBitmap(Bitmap.createBitmap(spriteSheet, GameConstants.Sprite.DEFAULT_SIZE * i, GameConstants.Sprite.DEFAULT_SIZE * j, GameConstants.Sprite.DEFAULT_SIZE, GameConstants.Sprite.DEFAULT_SIZE));
         }
     }
-
     public Bitmap getSprite(int id) {
         return sprites[id];
     }
-
 
 }

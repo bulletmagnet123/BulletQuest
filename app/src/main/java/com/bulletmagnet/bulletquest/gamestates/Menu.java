@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
+import com.bulletmagnet.bulletquest.enviroments.MapManager;
 import com.bulletmagnet.bulletquest.helpers.interfaces.GameStateInterface;
 import com.bulletmagnet.bulletquest.main.Game;
 
@@ -22,6 +23,7 @@ public class Menu extends BaseState implements GameStateInterface {
         paint.setTextAlign(Paint.Align.CENTER);
         this.game = game;
 
+
     }
     @Override
     public void update(double delta) {
@@ -30,7 +32,7 @@ public class Menu extends BaseState implements GameStateInterface {
 
     @Override
     public void render(Canvas c) {
-        c.drawText("MENU!", 800, 200, paint);
+        c.drawText("MENU! ITS WORKING THANK CHRIST", 800, 200, paint);
     }
 
     @Override

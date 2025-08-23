@@ -13,7 +13,9 @@ public final class GameConstants {
     public static final class Sprite{
         public static final int DEFAULT_SIZE = 16;
         public static final int DEFAULT_SCALE = 6;
-        public static final int SIZE = DEFAULT_SIZE * DEFAULT_SCALE;;
+
+        public static final int SIZE = 32;
+        public static final int SIZESCALLED = DEFAULT_SIZE * DEFAULT_SCALE;;
 
     }
 

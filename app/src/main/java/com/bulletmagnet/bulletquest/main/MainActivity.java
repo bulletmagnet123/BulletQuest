@@ -3,6 +3,7 @@ package com.bulletmagnet.bulletquest.main;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -10,15 +11,15 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.bulletmagnet.bulletquest.main.GamePanel;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
-
     public static int GAME_WIDTH, GAME_HEIGHT;
     private static Context gameContext;
-
-
+    public InputStream MapOne;
 
 
     @Override
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         );
         Log.d("MainActivity", "GameContextHolder initialized.");
         gameContext = this;
+
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getRealMetrics(dm);
         GAME_WIDTH = dm.widthPixels;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
+
 
 
         setContentView(new GamePanel(this));
