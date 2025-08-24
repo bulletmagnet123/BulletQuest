@@ -21,20 +21,14 @@ public class Playing extends BaseState implements GameStateInterface {
     private final Player player;
     private boolean movePlayer;
     private PointF lastTouchDiff;
-
     private MapManager mapManager;
     private Skeleton skeleton;
     private float xCenter = 250, yCenter = 800, radius = 150;
     private Paint circlePaint, JoystickPAINT;
-
     CustomButton btnExit;
     float btnExitX, btnExitY;
     private final PlayingUI  playingUI;
-
     private Menu menu;
-
-
-
     float xTouch, yTouch;
 
     boolean touchDown = false;
@@ -49,7 +43,7 @@ public class Playing extends BaseState implements GameStateInterface {
             menu = new Menu(game);
             btnExitX = 5;
             btnExitY = 5;
-            btnExit = new CustomButton(btnExitX, btnExitY, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
+            btnExit = new CustomButton(btnExitX, btnExitY, ButtonImages.PLAYING_MENU.getWidthPlayingNormal(), ButtonImages.PLAYING_MENU.getHeightPlayingNormal());
         }
 
     @Override
@@ -58,14 +52,8 @@ public class Playing extends BaseState implements GameStateInterface {
 
         player.update(delta, movePlayer);
 
-
-
-
         skeleton.update(delta);
         mapManager.setCameraValues(cameraX, cameraY);
-
-
-
     }
     private void updatePlayerMove(double delta) {
         if (!movePlayer)
@@ -91,8 +79,8 @@ public class Playing extends BaseState implements GameStateInterface {
         if (lastTouchDiff.y < 0)
             ySpeed *= -1;
 
-        int pWidth = GameConstants.Sprite.SIZESCALLED;
-        int pHeight = GameConstants.Sprite.SIZESCALLED;
+        int pWidth = GameConstants.SPRITE.SIZESCALLED;
+        int pHeight = GameConstants.SPRITE.SIZESCALLED;
 
         if (xSpeed <= 0)
             pWidth = 0;
@@ -115,11 +103,7 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     private void drawPlayer(Canvas c) {
-        c.drawBitmap(
-                player.getGameCharType().getSprite(player.getAniIndex(), player.getFaceDir()),
-                player.getHitbox().left,
-                player.getHitbox().top,
-                null);
+        c.drawBitmap(player.getGameCharType().getSprite(player.getAniIndex(), player.getFaceDir()), player.getHitbox().left + cameraX, player.getHitbox().top + cameraY, null);
     }
 
     @Override
@@ -130,11 +114,12 @@ public class Playing extends BaseState implements GameStateInterface {
         playingUI.drawUI(c);
 
         c.drawBitmap(
-                ButtonImages.PLAYING_MENU.Playing_getBtnImg(btnExit.isPushed()),
-                btnExit.getHitbox().left,
-                btnExit.getHitbox().top,
+                ButtonImages.PLAYING_MENU.getScaledBitmap(ButtonImages.PLAYING_MENU.Playing_getBtnImg(btnExit.isPushed())
+                ),
+                btnExit.getScaledHitbox().left,
+                btnExit.getScaledHitbox().top,
                 null);
-    }
+        }
 
 
     public void setPlayerMoveTrue(PointF lastTouchDiff) {
@@ -200,7 +185,7 @@ public class Playing extends BaseState implements GameStateInterface {
         }
     }
 
-    private boolean isIn(MotionEvent e,CustomButton b) {
-        return b.getHitbox().contains(e.getX(), e.getY());
+    private boolean isIn(MotionEvent e, CustomButton b) {
+        return b.getScaledHitbox().contains(e.getX(), e.getY());
     }
 }

@@ -44,12 +44,12 @@ public class MapManager {
 
     public int getMaxWidthCurrentMap() {
         if (currentMap == null) return 0; // Handle null case
-        return currentMap.getArrayWidth() * GameConstants.Sprite.SIZESCALLED;
+        return currentMap.getArrayWidth() * GameConstants.SPRITE.SIZESCALLED;
     }
 
     public int getMaxHeightCurrentMap() {
         if (currentMap == null) return 0; // Handle null case
-        return currentMap.getArrayHeight() * GameConstants.Sprite.SIZESCALLED;
+        return currentMap.getArrayHeight() * GameConstants.SPRITE.SIZESCALLED;
     }
 
 
@@ -88,8 +88,8 @@ public class MapManager {
                     // Ensure GameConstants.Sprite.SIZESCALLED (or whatever constant you use here for drawn size)
                     // is the actual width/height you want the tile drawn at.
                     c.drawBitmap(tileBitmap,
-                            i * GameConstants.Sprite.SIZESCALLED + cameraX,
-                            j * GameConstants.Sprite.SIZESCALLED + cameraY,
+                            i * GameConstants.SPRITE.SIZESCALLED + cameraX,
+                            j * GameConstants.SPRITE.SIZESCALLED + cameraY,
                             null);
                 } else {
                     // This might happen if spriteIndex is valid but getSprite somehow returns null

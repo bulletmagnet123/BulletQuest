@@ -42,7 +42,7 @@ public class PlayingUI {
         JoystickPAINT.setStrokeWidth(15);
         JoystickPAINT.setStyle(Paint.Style.FILL);
 
-        btnMenu = new CustomButton(5, 5, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
+        btnMenu = new CustomButton(5, 5, ButtonImages.PLAYING_MENU.getWidthPlayingNormal(), ButtonImages.PLAYING_MENU.getHeightPlayingNormal());
         ButtonHitbox = new RectF(btnMenu.getHitbox());
         btnMenu.setPushed(false);
     }

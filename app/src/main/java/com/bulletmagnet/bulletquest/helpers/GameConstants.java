@@ -10,7 +10,7 @@ public final class GameConstants {
 
     }
 
-    public static final class Sprite{
+    public static final class SPRITE {
         public static final int DEFAULT_SIZE = 16;
         public static final int DEFAULT_SCALE = 6;
 
@@ -22,5 +22,11 @@ public final class GameConstants {
     public static final class Animation{
         public static final int ANIM_DEFAULT_SPEED = 10;
         public static final int AMOUNT = 4;
+    }
+
+    public static final class BUTTONS {
+        public static final int BUTTON_WIDTH = 100;
+        public static final int BUTTON_HEIGHT = 100;
+        public static final int BUTTON_SCALE = 100;
     }
 }

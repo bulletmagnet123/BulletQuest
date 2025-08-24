@@ -2,9 +2,9 @@ package com.bulletmagnet.bulletquest.gamestates;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
+import com.bulletmagnet.bulletquest.helpers.GameConstants;
 import com.bulletmagnet.bulletquest.helpers.interfaces.GameStateInterface;
 import com.bulletmagnet.bulletquest.main.Game;
-import com.bulletmagnet.bulletquest.main.MainActivity;
 import com.bulletmagnet.bulletquest.mainui.ButtonImages;
 import com.bulletmagnet.bulletquest.mainui.CustomButton;
 
@@ -12,15 +12,15 @@ public class Menu extends BaseState implements GameStateInterface {
 
     private CustomButton btnStart;
 
-    private int menuX = 200;
-    private int menuY = 200;
+    private int menuX = 5;
+    private int menuY = 5;
 
     private int btnStartX;
     private int btnStartY;
 
     public Menu(Game game) {
         super(game);
-        btnStart = new CustomButton(menuX, menuY, ButtonImages.MENU_START.getWidth(), ButtonImages.MENU_START.getHeight());
+        btnStart = new CustomButton(menuX, menuY, ButtonImages.MENU_START.getWidthPlayingNormal(), ButtonImages.MENU_START.getHeightPlayingNormal());
     }
 
     @Override
@@ -31,10 +31,8 @@ public class Menu extends BaseState implements GameStateInterface {
     @Override
     public void render(Canvas c) {
         c.drawBitmap(
-                ButtonImages.MENU_START.Menu_getBtnImg(btnStart.isPushed()),
-                btnStart.getHitbox().left,
-                btnStart.getHitbox().top,
-                null);
+                ButtonImages.MENU_START.getScaledBitmap(ButtonImages.MENU_START.Menu_getBtnImg(btnStart.isPushed())
+                ), btnStart.getHitbox().left, btnStart.getHitbox().top, null);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class Menu extends BaseState implements GameStateInterface {
     }
 
     private boolean isIn(MotionEvent e, CustomButton b) {
-        return b.getHitbox().contains(e.getX(), e.getY());
+        return b.getScaledHitbox().contains(e.getX(), e.getY());
     }
 
 
