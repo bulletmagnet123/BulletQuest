@@ -7,21 +7,20 @@ import com.bulletmagnet.bulletquest.main.Game;
 import com.bulletmagnet.bulletquest.main.MainActivity;
 import com.bulletmagnet.bulletquest.mainui.ButtonImages;
 import com.bulletmagnet.bulletquest.mainui.CustomButton;
-import com.bulletmagnet.bulletquest.mainui.GameImages;
 
 public class Menu extends BaseState implements GameStateInterface {
 
     private CustomButton btnStart;
 
-    private int menuX = MainActivity.GAME_WIDTH / 6;
+    private int menuX = 200;
     private int menuY = 200;
 
-    private int btnStartX = menuX + 100;
-    private int btnStartY = menuY + 100;
+    private int btnStartX;
+    private int btnStartY;
 
     public Menu(Game game) {
         super(game);
-        btnStart = new CustomButton(btnStartX, btnStartY, ButtonImages.MENU_START.getWidth(), ButtonImages.MENU_START.getHeight());
+        btnStart = new CustomButton(menuX, menuY, ButtonImages.MENU_START.getWidth(), ButtonImages.MENU_START.getHeight());
     }
 
     @Override
@@ -32,7 +31,7 @@ public class Menu extends BaseState implements GameStateInterface {
     @Override
     public void render(Canvas c) {
         c.drawBitmap(
-                ButtonImages.MENU_START.getBtnImg(btnStart.isPushed()),
+                ButtonImages.MENU_START.Menu_getBtnImg(btnStart.isPushed()),
                 btnStart.getHitbox().left,
                 btnStart.getHitbox().top,
                 null);

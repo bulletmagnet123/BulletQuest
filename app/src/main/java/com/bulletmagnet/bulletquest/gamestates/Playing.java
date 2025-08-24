@@ -1,11 +1,8 @@
 package com.bulletmagnet.bulletquest.gamestates;
 
-import static com.bulletmagnet.bulletquest.mainui.ButtonImages.ButtonHitbox;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.view.MotionEvent;
 import com.bulletmagnet.bulletquest.main.Game;
 import com.bulletmagnet.bulletquest.main.MainActivity;
@@ -52,10 +49,7 @@ public class Playing extends BaseState implements GameStateInterface {
             menu = new Menu(game);
             btnExitX = 5;
             btnExitY = 5;
-
             btnExit = new CustomButton(btnExitX, btnExitY, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
-
-
         }
 
     @Override
@@ -63,6 +57,8 @@ public class Playing extends BaseState implements GameStateInterface {
         updatePlayerMove(delta);
 
         player.update(delta, movePlayer);
+
+
 
 
         skeleton.update(delta);
@@ -134,7 +130,7 @@ public class Playing extends BaseState implements GameStateInterface {
         playingUI.drawUI(c);
 
         c.drawBitmap(
-                ButtonImages.MENU_START.getBtnImg(btnExit.isPushed()),
+                ButtonImages.PLAYING_MENU.Playing_getBtnImg(btnExit.isPushed()),
                 btnExit.getHitbox().left,
                 btnExit.getHitbox().top,
                 null);
