@@ -1,8 +1,8 @@
 package com.bulletmagnet.bulletquest.mainui;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.RectF;
 
 import com.bulletmagnet.bulletquest.R;
 import com.bulletmagnet.bulletquest.helpers.interfaces.BitmapMethods;
@@ -10,89 +10,108 @@ import com.bulletmagnet.bulletquest.main.MainActivity;
 
 public enum ButtonImages implements BitmapMethods {
 
-    MENU_START(R.drawable.bluebuttons, // Atlas Resource ID
-            42, 0,             // Normal State: X, Y in atlas
-            42 * 11, 0,            // Pushed State: X, Y in atlas
-            42, 42                        // Single Button Graphic: Width, Height
+
+
+    MENU_START(R.drawable.bluebuttons, 320,160),
+    PLAYING_MENU(R.drawable.bluebuttons,320,160);
+
+    private int width, height;
+    private Bitmap normal, pushed;
+    public static RectF ButtonHitbox;
+    static RectF ButtonHitBox2;
+
+    ButtonImages(int resID, int width, int height) {
+        options.inScaled = false;
+        this.width = width;
+        this.height = height;
+
+        Bitmap buttonAtlas = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), resID, options);
+        normal = Bitmap.createBitmap(buttonAtlas,16 , 0, 16, 16);
+        pushed = Bitmap.createBitmap(buttonAtlas, 16 * 11, 0, 16, 16);
+
+    }
+
+    public int getWidth() {
+        return normal.getWidth();
+    }
+
+    public int getHeight() {
+        return normal.getHeight();
+    }
+
+    public Bitmap getBtnImg(boolean isBtnPushed) {
+        return isBtnPushed ? pushed : normal;
+    }
+    /*
+   *//* MENU_START(R.drawable.bluebuttons,42, 0,42 * 11, 0,
+            42, 42),MENU_EXIT(R.drawable.bluebuttons, 126,0,126 * 11, 0,42, 42);
+*//*
+   MENU_START(
+           42, 0,    // Normal State: X, Y in bluebuttons.png
+           42 * 11, 0
+   ),
+    MENU_EXIT(
+            126 * 4, 0,   // Normal State for Exit
+            126 * 4 * 11, 0
     );
 
-    private final int buttonGraphicWidth;
-    private final int buttonGraphicHeight;
+    int singleButtonWidth = 42;
+    int singleButtonHeight = 42;
 
     private Bitmap normalImage;
+    private static final int SHARED_ATLAS_RES_ID = R.drawable.bluebuttons;
     private Bitmap pushedImage;
-
+    Context context;
 
     private static final BitmapFactory.Options options;
+    Bitmap buttonAtlas;
 
     static {
         options = new BitmapFactory.Options();
         options.inScaled = false;
+        Context context = null;
+        Bitmap buttonAtlas = BitmapFactory.decodeResource(context.getResources(), SHARED_ATLAS_RES_ID, options);
+
     }
 
-    ButtonImages(int atlasResId,
-                 int normalStateX, int normalStateY,
-                 int pushedStateX, int pushedStateY,
-                 int singleButtonWidth, int singleButtonHeight) {
+    ButtonImages( int normalStateX, int normalStateY,
+                  int pushedStateX, int pushedStateY
+                  ) {
 
-        this.buttonGraphicWidth = singleButtonWidth;
-        this.buttonGraphicHeight = singleButtonHeight;
 
-        Context context = MainActivity.getGameContext();
         if (context == null) {
             System.out.println("Context is null. Cannot load button images for: ");
             return;
         }
 
-        Bitmap buttonAtlas = null;
-        try {
-            buttonAtlas = BitmapFactory.decodeResource(context.getResources(), atlasResId, BitmapMethods.options);
-        } catch (Exception e) {
-            System.out.println("Error loading buttonAtlas (resID: " + atlasResId + ") for: " + this.name());
-        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap normal = Bitmap.createBitmap(buttonAtlas, normalStateX, normalStateY, singleButtonWidth, singleButtonHeight);
+        Bitmap pushed = Bitmap.createBitmap(buttonAtlas, pushedStateX, pushedStateY, singleButtonWidth, singleButtonHeight);
 
-        if (buttonAtlas == null) {
-            System.out.println("Failed to load buttonAtlas (resID: " + atlasResId + ") for: " + this.name());
-            return;
-        }
-
-        // Load Normal Image
-        try {
-            if (isValidCrop(buttonAtlas, normalStateX, normalStateY, singleButtonWidth, singleButtonHeight)) {
-                normalImage = Bitmap.createBitmap(buttonAtlas, normalStateX, normalStateY, singleButtonWidth, singleButtonHeight);
-            } else {
-                logBoundsError("Normal", this.name(), buttonAtlas, normalStateX, normalStateY, singleButtonWidth, singleButtonHeight);
-            }
-        } catch (Exception e) {
-            System.out.println("Error creating normalImage for ");
-        }
-
-        // Load Pushed Image
-        try {
-            if (isValidCrop(buttonAtlas, pushedStateX, pushedStateY, singleButtonWidth, singleButtonHeight)) {
-                pushedImage = Bitmap.createBitmap(buttonAtlas, pushedStateX, pushedStateY, singleButtonWidth, singleButtonHeight);
-            } else {
-                logBoundsError("Pushed", this.name(), buttonAtlas, pushedStateX, pushedStateY, singleButtonWidth, singleButtonHeight);
-                // Fallback: If pushed image is out of bounds or fails, use normal image for pushed state
-                if (normalImage != null) {
-                    System.out.println("Falling back to normal image for pushed state of ");
-                    pushedImage = normalImage;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error creating pushedImage for ");
-            if (normalImage != null && pushedImage == null) {
-                System.out.println("Falling back to normal image for pushed state of " + this.name() + " due to exception.");
-                pushedImage = normalImage;
-            }
-        }
-        // Consider not recycling the atlas here if multiple enum constants might share it.
-        // Or if you only have one enum constant using one atlas, it might be okay.
-        // if (buttonAtlas != null && !buttonAtlas.isRecycled()) {
-        // buttonAtlas.recycle();
-        // }
     }
 
+    public static void initialize(Context context) {
+        Context appContext = null;
+        if (context == null) {
+            System.out.println("Context is null. Cannot initialize ButtonImages.");
+            return;
+        }
+        appContext = context;
+
+
+    }
+
+    public static void loadAllImages() {
+    }
+
+    *//* ButtonImages( // Constructor no longer takes atlasResId as a parameter
+                   int normalStateX, int normalStateY,
+                   int pushedStateX, int pushedStateY,
+                   int singleButtonWidth, int singleButtonHeight) {
+         BitmapFactory.Options options = new BitmapFactory.Options();
+         options.inScaled = false;
+     }
+ *//*
     public Bitmap getBtnImg(boolean isPushed) {
         if (isPushed) {
             // If pushedImage is null (e.g., failed to load), fallback to normalImage
@@ -103,11 +122,11 @@ public enum ButtonImages implements BitmapMethods {
     }
 
     public int getWidth() {
-        return buttonGraphicWidth;
+        return buttonAtlas.getWidth();
     }
 
     public int getHeight() {
-        return buttonGraphicHeight;
+        return buttonAtlas.getHeight();
     }
 
     private boolean isValidCrop(Bitmap atlas, int x, int y, int width, int height) {
@@ -119,8 +138,5 @@ public enum ButtonImages implements BitmapMethods {
 
     private void logBoundsError(String stateName, String buttonName, Bitmap atlas, int x, int y, int width, int height) {
         System.out.println("Invalid bounds for " + stateName + " image of " + buttonName + ": ");
-    }
-
-
-
+    }*/
 }

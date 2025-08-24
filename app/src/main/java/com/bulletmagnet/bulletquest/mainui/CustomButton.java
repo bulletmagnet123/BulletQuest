@@ -1,8 +1,8 @@
 package com.bulletmagnet.bulletquest.mainui;
+import android.graphics.Bitmap;
 import android.graphics.RectF;
 
 public class CustomButton {
-
     private final RectF hitbox;
 
     private boolean pushed;
@@ -15,11 +15,11 @@ public class CustomButton {
         return hitbox;
     }
 
-    public boolean isPressed() {
+    public boolean isPushed() {
         return pushed;
     }
 
-    public void setPressed(boolean pushed) {
+    public void setPushed(boolean pushed) {
         this.pushed = pushed;
     }
 
