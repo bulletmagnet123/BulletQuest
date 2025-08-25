@@ -1,14 +1,11 @@
 package com.bulletmagnet.bulletquest.mainui;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.MotionEvent;
-
 import com.bulletmagnet.bulletquest.gamestates.Playing;
-
 public class PlayingUI {
 
     //For UI
@@ -43,8 +40,10 @@ public class PlayingUI {
         JoystickPAINT.setStyle(Paint.Style.FILL);
 
         btnMenu = new CustomButton(5, 5, ButtonImages.PLAYING_MENU.getWidthPlayingNormal(), ButtonImages.PLAYING_MENU.getHeightPlayingNormal());
-        ButtonHitbox = new RectF(btnMenu.getHitbox());
+        ButtonHitbox = new RectF(btnMenu.getScaledHitbox());
         btnMenu.setPushed(false);
+
+
     }
 
 
@@ -53,6 +52,9 @@ public class PlayingUI {
         if (touchDown) {
             c.drawLine(xCenter, yCenter, xTouch, yTouch, JoystickPAINT);
         }
+        c.drawBitmap(
+                ButtonImages.PLAYING_MENU.getScaledBitmap(ButtonImages.PLAYING_MENU.Menu_getBtnImg(btnMenu.isPushed())
+                ), btnMenu.getScaledHitbox().left, btnMenu.getScaledHitbox().top, null);
     }
 
     public void touchEvents(MotionEvent event) {
@@ -95,7 +97,8 @@ public class PlayingUI {
         }
     }
 
-    public boolean isInside(MotionEvent event, RectF ButtonHitbox){
-        return ButtonHitbox.contains(event.getX(), event.getY());
+    private boolean isIn(MotionEvent e, RectF f) {
+        return f.contains(e.getX(), e.getY());
     }
+
 }

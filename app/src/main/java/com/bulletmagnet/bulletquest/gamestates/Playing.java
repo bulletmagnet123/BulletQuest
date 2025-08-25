@@ -3,6 +3,7 @@ package com.bulletmagnet.bulletquest.gamestates;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import com.bulletmagnet.bulletquest.main.Game;
 import com.bulletmagnet.bulletquest.main.MainActivity;
@@ -21,39 +22,45 @@ public class Playing extends BaseState implements GameStateInterface {
     private final Player player;
     private boolean movePlayer;
     private PointF lastTouchDiff;
+
     private MapManager mapManager;
     private Skeleton skeleton;
     private float xCenter = 250, yCenter = 800, radius = 150;
     private Paint circlePaint, JoystickPAINT;
+
     CustomButton btnExit;
     float btnExitX, btnExitY;
     private final PlayingUI  playingUI;
+
     private Menu menu;
+
+
+
     float xTouch, yTouch;
 
     boolean touchDown = false;
 
     public Playing(Game game) {
-            super(game);
-            mapManager = new MapManager(MainActivity.getGameContext());
-            player = new Player();
-            skeleton = new Skeleton(new PointF(100, 100));
+        super(game);
+        mapManager = new MapManager(MainActivity.getGameContext());
+        player = new Player();
+        skeleton = new Skeleton(new PointF(100, 100));
 
-            playingUI = new PlayingUI(this);
-            menu = new Menu(game);
-            btnExitX = 5;
-            btnExitY = 5;
-            btnExit = new CustomButton(btnExitX, btnExitY, ButtonImages.PLAYING_MENU.getWidthPlayingNormal(), ButtonImages.PLAYING_MENU.getHeightPlayingNormal());
-        }
+        playingUI = new PlayingUI(this);
+        menu = new Menu(game);
+        btnExit = new CustomButton(5, 5, ButtonImages.PLAYING_MENU.getWidthPlayingNormal(), ButtonImages.PLAYING_MENU.getHeightPlayingNormal());
+
+    }
 
     @Override
     public void update(double delta) {
         updatePlayerMove(delta);
 
         player.update(delta, movePlayer);
-
         skeleton.update(delta);
         mapManager.setCameraValues(cameraX, cameraY);
+
+
     }
     private void updatePlayerMove(double delta) {
         if (!movePlayer)
@@ -103,7 +110,11 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     private void drawPlayer(Canvas c) {
-        c.drawBitmap(player.getGameCharType().getSprite(player.getAniIndex(), player.getFaceDir()), player.getHitbox().left + cameraX, player.getHitbox().top + cameraY, null);
+        c.drawBitmap(
+                player.getGameCharType().getSprite(player.getAniIndex(), player.getFaceDir()),
+                player.getHitbox().left,
+                player.getHitbox().top,
+                null);
     }
 
     @Override
@@ -112,14 +123,14 @@ public class Playing extends BaseState implements GameStateInterface {
         drawPlayer(c);
         drawCharacter(c, skeleton);
         playingUI.drawUI(c);
-
         c.drawBitmap(
-                ButtonImages.PLAYING_MENU.getScaledBitmap(ButtonImages.PLAYING_MENU.Playing_getBtnImg(btnExit.isPushed())
-                ),
-                btnExit.getScaledHitbox().left,
-                btnExit.getScaledHitbox().top,
+                ButtonImages.PLAYING_MENU.getScaledBitmap
+                        (ButtonImages.PLAYING_MENU.Menu_getBtnImg
+                                (btnExit.isPushed())),
+                btnExit.getHitbox().left, btnExit.getHitbox().top,
                 null);
-        }
+    }
+
 
 
     public void setPlayerMoveTrue(PointF lastTouchDiff) {
@@ -137,6 +148,8 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     public void touchEvents(MotionEvent event) {
+
+        playingUI.touchEvents(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN -> {
 
@@ -153,8 +166,8 @@ public class Playing extends BaseState implements GameStateInterface {
                     xTouch = x;
                     yTouch = y;
                 } else {
-                    if (isIn(event, btnExit))
-                        btnExit.setPushed(true);
+                    if (isIn(event, btnExit.getScaledHitbox()))
+                    btnExit.setPushed(true);
                 }
 
                 playingUI.touchEvents(event);
@@ -175,7 +188,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
             }
             case MotionEvent.ACTION_UP -> {
-                if (isIn(event, btnExit))
+                if (isIn(event, btnExit.getScaledHitbox()))
                     if (btnExit.isPushed())
                         setGameStateMenu();
                 btnExit.setPushed(false);
@@ -185,7 +198,7 @@ public class Playing extends BaseState implements GameStateInterface {
         }
     }
 
-    private boolean isIn(MotionEvent e, CustomButton b) {
-        return b.getScaledHitbox().contains(e.getX(), e.getY());
+    private boolean isIn(MotionEvent e, RectF f) {
+        return f.contains(e.getX(), e.getY());
     }
 }
