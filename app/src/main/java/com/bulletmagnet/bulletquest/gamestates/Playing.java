@@ -125,9 +125,8 @@ public class Playing extends BaseState implements GameStateInterface {
         playingUI.drawUI(c);
         c.drawBitmap(
                 ButtonImages.PLAYING_MENU.getScaledBitmap
-                        (ButtonImages.PLAYING_MENU.Menu_getBtnImg
-                                (btnExit.isPushed())),
-                btnExit.getHitbox().left, btnExit.getHitbox().top,
+                        (ButtonImages.PLAYING_MENU.Playing_getBtnImg(btnExit.isPushed())),
+                btnExit.getScaledHitbox().left, btnExit.getScaledHitbox().top,
                 null);
     }
 
