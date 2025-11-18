@@ -25,20 +25,9 @@ public class Playing extends BaseState implements GameStateInterface {
 
     private MapManager mapManager;
     private Skeleton skeleton;
-    private float xCenter = 250, yCenter = 800, radius = 150;
-    private Paint circlePaint, JoystickPAINT;
 
     CustomButton btnExit;
-    float btnExitX, btnExitY;
-    private final PlayingUI  playingUI;
-
-    private Menu menu;
-
-
-
-    float xTouch, yTouch;
-
-    boolean touchDown = false;
+    private final PlayingUI playingUI;
 
     public Playing(Game game) {
         super(game);
@@ -47,24 +36,26 @@ public class Playing extends BaseState implements GameStateInterface {
         skeleton = new Skeleton(new PointF(100, 100));
 
         playingUI = new PlayingUI(this);
-        menu = new Menu(game);
         btnExit = new CustomButton(5, 5, ButtonImages.PLAYING_MENU.getWidthPlayingNormal(), ButtonImages.PLAYING_MENU.getHeightPlayingNormal());
+    }
 
+    public void initializeUI(int screenWidth, int screenHeight) {
+        playingUI.init(screenWidth, screenHeight);
     }
 
     @Override
     public void update(double delta) {
         updatePlayerMove(delta);
-
         player.update(delta, movePlayer);
         skeleton.update(delta);
         mapManager.setCameraValues(cameraX, cameraY);
-
-
     }
+
     private void updatePlayerMove(double delta) {
-        if (!movePlayer)
+        if (!movePlayer || lastTouchDiff == null || (lastTouchDiff.x == 0 && lastTouchDiff.y == 0)) {
+            player.resetAnimation();
             return;
+        }
 
         float baseSpeed = (float) (delta * 300);
         float ratio = Math.abs(lastTouchDiff.y) / Math.abs(lastTouchDiff.x);
@@ -130,7 +121,9 @@ public class Playing extends BaseState implements GameStateInterface {
                 null);
     }
 
-
+    public void playerAttack() {
+        // Implement player attack logic here
+    }
 
     public void setPlayerMoveTrue(PointF lastTouchDiff) {
         movePlayer = true;
@@ -147,57 +140,6 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     public void touchEvents(MotionEvent event) {
-
         playingUI.touchEvents(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN -> {
-
-
-                float x = event.getX();
-                float y = event.getY();
-
-                float a = Math.abs(x - xCenter);
-                float b = Math.abs(y - yCenter);
-                float c = (float) Math.hypot(a, b);
-
-                if (c <= radius) {
-                    touchDown = true;
-                    xTouch = x;
-                    yTouch = y;
-                } else {
-                    if (isIn(event, btnExit.getScaledHitbox()))
-                    btnExit.setPushed(true);
-                }
-
-                playingUI.touchEvents(event);
-
-            }
-
-            case MotionEvent.ACTION_MOVE -> {
-                if (touchDown) {
-                    xTouch = event.getX();
-                    yTouch = event.getY();
-
-                    float xDiff = xTouch - xCenter;
-                    float yDiff = yTouch - yCenter;
-
-                    setPlayerMoveTrue(new PointF(xDiff, yDiff));
-
-                }
-
-            }
-            case MotionEvent.ACTION_UP -> {
-                if (isIn(event, btnExit.getScaledHitbox()))
-                    if (btnExit.isPushed())
-                        setGameStateMenu();
-                btnExit.setPushed(false);
-                touchDown = false;
-                setPlayerMoveFalse();
-            }
-        }
-    }
-
-    private boolean isIn(MotionEvent e, RectF f) {
-        return f.contains(e.getX(), e.getY());
     }
 }

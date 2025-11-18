@@ -13,6 +13,7 @@ import com.bulletmagnet.bulletquest.gamestates.Playing;
 
 public class Game {
 
+    private final GamePanel gameView;
     private SurfaceHolder holder;
     private Menu menu;
     private Playing playing;
@@ -21,28 +22,32 @@ public class Game {
 
     GameLoop gameLoop;
 
-    public Game(SurfaceHolder holder){
+    public Game(SurfaceHolder holder, GamePanel gameView) {
         this.holder = holder;
+        this.gameView = gameView;
         gameLoop = new GameLoop(this);
         initGameStates();
     }
 
+    public void onSurfaceCreated(int width, int height) {
+        playing.initializeUI(width, height);
+    }
 
-
-    public void update(double delta){
-        switch (currentGameState){
+    public void update(double delta) {
+        switch (currentGameState) {
             case MENU -> menu.update(delta);
             case PLAYING -> playing.update(delta);
         }
     }
 
-    public void render(){
+    public void render() {
         Canvas c = holder.lockCanvas();
+        if (c == null) {
+            return;
+        }
         c.drawColor(Color.BLACK);
 
-
-
-        switch (currentGameState){
+        switch (currentGameState) {
             case MENU -> menu.render(c);
             case PLAYING -> playing.render(c);
         }
@@ -59,7 +64,7 @@ public class Game {
         gameLoop.startGameLoop();
     }
 
-    public enum GameState{
+    public enum GameState {
         MENU,
         PLAYING
     }
@@ -67,6 +72,7 @@ public class Game {
     public GameState getCurrentGameState() {
         return currentGameState;
     }
+
     public boolean touchEvent(MotionEvent event) {
         switch (currentGameState) {
             case MENU -> menu.touchEvents(event);
@@ -79,5 +85,15 @@ public class Game {
         this.currentGameState = currentGameState;
     }
 
+    public GamePanel getGameView() {
+        return gameView;
+    }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
+    }
 }
