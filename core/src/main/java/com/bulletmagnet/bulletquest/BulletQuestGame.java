@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.bulletmagnet.bulletquest.entities.GameCharacters;
 import com.bulletmagnet.bulletquest.entities.Weapons;
+import com.bulletmagnet.bulletquest.enviroments.Buildings;
 import com.bulletmagnet.bulletquest.enviroments.Floor;
 import com.bulletmagnet.bulletquest.helpers.WindowSettings;
 import com.kotcrab.vis.ui.VisUI;
@@ -71,6 +72,7 @@ public class BulletQuestGame extends ApplicationAdapter {
         batch.dispose();
         GameCharacters.disposeAll();
         Floor.disposeAll();
+        Buildings.disposeAll();
         ButtonImages.disposeAll();
         Weapons.disposeAll();
         GameImages.disposeAll();

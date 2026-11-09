@@ -1,11 +1,13 @@
 package com.bulletmagnet.bulletquest.gamestates;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.bulletmagnet.bulletquest.main.Game;
 import com.bulletmagnet.bulletquest.entities.Character;
 import com.bulletmagnet.bulletquest.entities.Player;
 import com.bulletmagnet.bulletquest.entities.enemies.Skeleton;
+import com.bulletmagnet.bulletquest.enviroments.Building;
 import com.bulletmagnet.bulletquest.enviroments.Door;
 import com.bulletmagnet.bulletquest.enviroments.GameMap;
 import com.bulletmagnet.bulletquest.enviroments.MapManager;
@@ -24,6 +26,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private MapManager mapManager;
     // Skeletons now live in each map (see MapManager.addEnemies)
 
+    private final Rectangle playerFeet = new Rectangle(); // used for bumping into buildings
     private boolean standingOnDoor; // so a door only fires when you walk onto it, not while standing on it
 
     private final PlayingUI playingUI;
@@ -60,6 +63,8 @@ public class Playing extends BaseState implements GameStateInterface {
         player.update(delta, movePlayer);
         for (Skeleton skeleton : mapManager.getCurrentMap().getSkeletons())
             skeleton.update(delta);
+        for (Building building : mapManager.getCurrentMap().getBuildings())
+            building.update(delta, getPlayerFeet(cameraX, cameraY));
         checkDoors();
         mapManager.setCameraValues(cameraX, cameraY);
     }
@@ -129,10 +134,24 @@ public class Playing extends BaseState implements GameStateInterface {
         float deltaX = xSpeed * baseSpeed * -1;
         float deltaY = ySpeed * baseSpeed * -1;
 
-        if (mapManager.canMoveHere(player.getHitbox().x + cameraX * -1 + deltaX * -1 + pWidth, player.getHitbox().y + cameraY * -1 + deltaY * -1 + pHeight)) {
+        if (mapManager.canMoveHere(player.getHitbox().x + cameraX * -1 + deltaX * -1 + pWidth, player.getHitbox().y + cameraY * -1 + deltaY * -1 + pHeight)
+                && !walksIntoBuilding(deltaX, deltaY)) {
             cameraX += deltaX;
             cameraY += deltaY;
         }
+    }
+
+    // The bottom half of the player sprite, in map pixels, for this camera position
+    private Rectangle getPlayerFeet(float camX, float camY) {
+        int size = GameConstants.SPRITE.SIZESCALLED;
+        return playerFeet.set(player.getHitbox().x - camX, player.getHitbox().y - camY + size / 2f, size, size / 2f);
+    }
+
+    private boolean walksIntoBuilding(float deltaX, float deltaY) {
+        GameMap map = mapManager.getCurrentMap();
+        if (map.isBlockedByBuilding(getPlayerFeet(cameraX, cameraY)))
+            return false; // already stuck inside one (e.g. spawned there), so let the player walk out
+        return map.isBlockedByBuilding(getPlayerFeet(cameraX + deltaX, cameraY + deltaY));
     }
 
     private void drawCharacter(SpriteBatch batch, Character c) {

@@ -44,6 +44,7 @@ public class MapManager {
             if (map == null)
                 return null; // keep the current map if loading failed
             addEnemies(fileName, map);
+            addBuildings(fileName, map);
             loadedMaps.put(fileName, map);
         }
         currentMap = map;
@@ -55,6 +56,17 @@ public class MapManager {
     private void addEnemies(String fileName, GameMap map) {
         if (fileName.equals(dirt))
             map.getSkeletons().add(new Skeleton(new Vector2(100, 100)));
+    }
+
+    // Buildings that live in each map. Positions are the building's top-left tile (x = column, y = row).
+    // You can also place them in Tiled instead (object layer "buildings", see loadBuildings).
+    private void addBuildings(String fileName, GameMap map) {
+        if (fileName.equals(townOne)) {
+            map.addBuilding(Buildings.BUILDING_7, 1, 2);
+            map.addBuilding(Buildings.BUILDING_8, 19, 2);
+            map.addBuilding(Buildings.BUILDING_1, 2, 10);
+            map.addBuilding(Buildings.BUILDING_2, 15, 13, true); // true = winter version
+        }
     }
 
     public GameMap getCurrentMap() {
@@ -150,6 +162,9 @@ public class MapManager {
             Rectangle a = door.getArea();
             c.draw(GameImages.DOOR.getImage(), a.x + cameraX, a.y + cameraY, a.width, a.height);
         }
+
+        for (Building building : currentMap.getBuildings())
+            building.draw(c, cameraX, cameraY);
     }
 
     private void initTestMap() {
@@ -305,6 +320,7 @@ public class MapManager {
             if (spriteIds != null && spriteIds.length > 0) {
                 GameMap map = new GameMap(spriteIds);
                 loadDoors(layers, map, mapOffsetX, mapOffsetY);
+                loadBuildings(layers, map, mapOffsetX, mapOffsetY);
                 System.out.println("MapManager: Successfully loaded and processed map: " + fileName + " (" + map.getDoors().size() + " doors)");
                 return map;
             } else {
@@ -353,6 +369,38 @@ public class MapManager {
                         targetMap,
                         getProperty(obj, "targetDoor", ""),
                         getProperty(obj, "exitDirection", "down")));
+            }
+        }
+    }
+
+    // Reads buildings from Tiled: an object layer named "buildings" (or objects with type/class "building").
+    // Draw a point or rectangle where the building's top-left corner goes and set its name
+    // (or a "building" property) to BUILDING_1 ... BUILDING_9 (or just 1 ... 9).
+    // Optional bool property "winter" = snowy version.
+    private void loadBuildings(JsonValue layers, GameMap map, int mapOffsetX, int mapOffsetY) {
+        int scale = GameConstants.SPRITE.DEFAULT_SCALE;
+        int tileSize = GameConstants.SPRITE.DEFAULT_SIZE;
+
+        for (JsonValue layer = layers.child; layer != null; layer = layer.next) {
+            if (!"objectgroup".equals(layer.getString("type", "")) || !layer.has("objects"))
+                continue;
+            boolean buildingLayer = "buildings".equalsIgnoreCase(layer.getString("name", ""));
+
+            for (JsonValue obj = layer.get("objects").child; obj != null; obj = obj.next) {
+                String type = obj.getString("type", obj.getString("class", ""));
+                if (!buildingLayer && !"building".equalsIgnoreCase(type))
+                    continue;
+
+                String name = getProperty(obj, "building", obj.getString("name", ""));
+                Buildings building = Buildings.fromName(name);
+                if (building == null) {
+                    System.err.println("MapManager Warning: unknown building '" + name + "', skipped.");
+                    continue;
+                }
+                map.getBuildings().add(new Building(building,
+                        (obj.getFloat("x") + mapOffsetX * tileSize) * scale,
+                        (obj.getFloat("y") + mapOffsetY * tileSize) * scale,
+                        Boolean.parseBoolean(getProperty(obj, "winter", "false"))));
             }
         }
     }
